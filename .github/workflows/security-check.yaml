@@ -15,6 +15,5 @@ jobs:
         uses: microsoft/ps-rule@v2.9.0
         id: run_psrule
         with:
-          source: '.ps-rule'
           modules: 'PSRule.Rules.Azure'
           baseline: 'TemplateValidation.MI_2024_10'
