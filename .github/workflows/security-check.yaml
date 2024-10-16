@@ -20,13 +20,13 @@ jobs:
         with:
           modules: 'PSRule.Rules.Azure'
           baseline: 'TemplateValidation.MI_2024_10'
-          outputFormat: 'markdown'
-          outputPath: 'output.md'
+          outputFormat: 'json'
+          outputPath: 'output.json'
       
       - name: Upload output
         uses: actions/upload-artifact@v4
         with:
           name: output
-          path: output.md
+          path: output.json
 
       
