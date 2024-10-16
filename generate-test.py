@@ -4,6 +4,11 @@ import re
 with open('infra/main.bicep', 'r') as file:
     main_bicep_content = file.read()
 
+# Find the targetScope
+target_scope_pattern = re.compile(r'targetScope\s*=\s*\'(\w+)\'')
+target_scope_match = target_scope_pattern.search(main_bicep_content)
+target_scope = target_scope_match.group(1) if target_scope_match else 'subscription'
+
 # Find all parameter definitions and allowed values
 param_pattern = re.compile(r'param\s+(\w+)\s+(\w+)')
 allowed_pattern = re.compile(r'@allowed\(\[\s*([^\]]+)\s*\]\)(?:\s*@\w+\([^\)]*\))*\s*param\s+(\w+)\s+(\w+)')
@@ -12,15 +17,15 @@ params = param_pattern.findall(main_bicep_content)
 allowed_params = allowed_pattern.findall(main_bicep_content)
 
 # Generate the main.test.bicep content
-test_bicep_content = """// This file is for doing static analysis and contains sensible defaults
+test_bicep_content = f"""// This file is for doing static analysis and contains sensible defaults
 // for PSRule to minimise false-positives and provide the best results.
 // This file is not intended to be used as a runtime configuration file.
 
-targetScope = 'subscription'
+targetScope = '{target_scope}'
 
-module test 'main.bicep' = {
+module test 'main.bicep' = {{
   name: 'test'
-  params: {
+  params: {{
 """
 
 # Add parameters to the test file content
