@@ -127,7 +127,6 @@ module aca 'aca.bicep' = {
     name: replace('${take(prefix,19)}-ca', '--', '-')
     location: location
     tags: tags
-    identityName: '${prefix}-id-aca'
     containerAppsEnvironmentName: containerApps.outputs.environmentName
     containerRegistryName: containerApps.outputs.registryName
     openAiDeploymentName: openAiDeploymentName
@@ -149,16 +148,6 @@ module openAiRoleUser 'core/security/role.bicep' = if (createRoleForUser && crea
 }
 
 
-module openAiRoleBackend 'core/security/role.bicep' = if (createAzureOpenAi) {
-  scope: openAiResourceGroup
-  name: 'openai-role-backend'
-  params: {
-    principalId: aca.outputs.SERVICE_ACA_IDENTITY_PRINCIPAL_ID
-    roleDefinitionId: '5e0bd9bd-7b93-4f28-af87-19fc36ad61bd'
-    principalType: 'ServicePrincipal'
-  }
-}
-
 output AZURE_LOCATION string = location
 output AZURE_TENANT_ID string = tenant().tenantId
 
@@ -168,7 +157,6 @@ output AZURE_OPENAI_CHAT_DEPLOYMENT string = openAiDeploymentName
 output AZURE_OPENAI_API_VERSION string = openAiApiVersion
 output AZURE_OPENAI_ENDPOINT string = createAzureOpenAi ? openAi.outputs.endpoint : openAiEndpoint
 
-output SERVICE_ACA_IDENTITY_PRINCIPAL_ID string = aca.outputs.SERVICE_ACA_IDENTITY_PRINCIPAL_ID
 output SERVICE_ACA_NAME string = aca.outputs.SERVICE_ACA_NAME
 output SERVICE_ACA_URI string = aca.outputs.SERVICE_ACA_URI
 output SERVICE_ACA_IMAGE_NAME string = aca.outputs.SERVICE_ACA_IMAGE_NAME
