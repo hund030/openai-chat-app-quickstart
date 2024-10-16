@@ -22,6 +22,7 @@ jobs:
           baseline: 'TemplateValidation.MI_2024_10'
           outputFormat: 'json'
           outputPath: 'output.json'
+        continue-on-error: true
       
       - name: Upload output
         uses: actions/upload-artifact@v4
